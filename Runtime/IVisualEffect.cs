@@ -8,13 +8,11 @@ namespace Snowraph.VisualEffects
     {
         public Transform RootTransform { get; }
 
-        public void Initialize(Pool<IVisualEffect> pool);
+        public event Action<IVisualEffect> Stopped;
 
         public void Play();
 
         public void Stop();
-
-        public void CacheVisualEffectModifiers();
 
         T GetModifiers<T>() where T : Component;
     }

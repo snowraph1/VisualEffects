@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Snowraph.GameSystem;
 using UnityEngine;
@@ -12,6 +11,7 @@ namespace Snowraph.VisualEffects
         #region Private Fields
 
         private Dictionary<VisualEffectData, Pool<IVisualEffect>> _visualEffectPools;
+        private Dictionary<IVisualEffect, Pool<IVisualEffect>> _visualEffectHandles;
 
         #endregion
 
@@ -20,6 +20,7 @@ namespace Snowraph.VisualEffects
         public void Initialize()
         {
             _visualEffectPools = new Dictionary<VisualEffectData, Pool<IVisualEffect>>();
+            _visualEffectHandles = new Dictionary<IVisualEffect, Pool<IVisualEffect>>();
             GameSystems.Instance.Register(this);
         }
 
@@ -27,7 +28,7 @@ namespace Snowraph.VisualEffects
 
         #region IVisualEffectSystem Methods
 
-        public void PlayVisualEffect(Vector3 position, VisualEffectData visualEffectData, Action<IVisualEffect> OnVisualEffectStarted)
+        public void PlayVisualEffect(Vector3 position, VisualEffectData visualEffectData, Action<IVisualEffect> OnVisualEffectStarted = null)
         {
             Pool<IVisualEffect> visualEffectPool;
 
@@ -49,9 +50,23 @@ namespace Snowraph.VisualEffects
             IVisualEffect visualEffect = visualEffectPool.GetElement();
             visualEffect.RootTransform.position = position;
             visualEffect.Play();
-            visualEffect.Initialize(visualEffectPool);
+
+            _visualEffectHandles.Add(visualEffect, visualEffectPool);
+            visualEffect.Stopped -= OnVisualEffectStopped;
+            visualEffect.Stopped += OnVisualEffectStopped;
 
             return visualEffect;
+        }
+
+        private void OnVisualEffectStopped(IVisualEffect visualEffect)
+        {
+            if (_visualEffectHandles.TryGetValue(visualEffect, out Pool<IVisualEffect> visualEffectPool))
+            {
+                visualEffectPool.ReturnElement(visualEffect);
+                _visualEffectHandles.Remove(visualEffect);
+            }
+
+            visualEffect.Stopped -= OnVisualEffectStopped;
         }
 
         private Pool<IVisualEffect> CreateVisualEffectPool(VisualEffectData visualEffectData)

@@ -36,7 +36,6 @@ namespace Snowraph.VisualEffects
             GameObject visualEffectObject = Instantiate(_prefab);
             if (visualEffectObject.TryGetComponent(out IVisualEffect visualEffect))
             {
-                visualEffect.CacheVisualEffectModifiers();
                 return visualEffect;
             }
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Snowraph.Utilities;
 using UnityEngine;
 
 namespace Snowraph.VisualEffects
@@ -12,7 +11,8 @@ namespace Snowraph.VisualEffects
         [SerializeField] private ParticleSystem _particleSystem;
 
         private List<IVisualEffectModifier> _visualEffectModifiers;
-        private Pool<IVisualEffect> _visualEffectPool;
+
+        public event Action<IVisualEffect> Stopped;
 
         #endregion
 
@@ -27,19 +27,21 @@ namespace Snowraph.VisualEffects
 
         #region IVisualEffect Methods
 
-        public void Initialize(Pool<IVisualEffect> pool)
-        {
-            _visualEffectPool = pool;
-        }
-
         public void Play()
         {
+            if (_visualEffectModifiers == null)
+            {
+                IVisualEffectModifier[] modifiers = GetComponentsInChildren<IVisualEffectModifier>();
+                _visualEffectModifiers = modifiers.ToList();
+            }
+
             _particleSystem.Play();
         }
 
         public void Stop()
         {
             _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            Stopped?.Invoke(this);
         }
 
         public T GetModifiers<T>() where T : Component
@@ -62,19 +64,7 @@ namespace Snowraph.VisualEffects
         // This triggers automatically when the particle system stops and all particles die
         private void OnParticleSystemStopped()
         {
-            Debug.Log("stopped");
             Stop();
-            _visualEffectPool.ReturnElement(this);
-        }
-
-        #endregion
-
-        #region Internal Methods
-
-        public void CacheVisualEffectModifiers()
-        {
-            IVisualEffectModifier[] modifiers = GetComponentsInChildren<IVisualEffectModifier>();
-            _visualEffectModifiers = modifiers.ToList();
         }
 
         #endregion
