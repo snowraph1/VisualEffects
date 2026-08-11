@@ -1,8 +1,8 @@
 {
-  "name": "com.snowraph.vfxsystem",
+  "name": "com.snowraph.visualeffects",
   "version": "1.0.1",
-  "displayName": "[SNOWRAPH] VFXSystem",
-  "description": "A package to play VFX",
+  "displayName": "[SNOWRAPH] VisualEffects",
+  "description": "A package to play visual effects",
   "unity": "2020.3",
   "author": {
     "name": "snowraph",

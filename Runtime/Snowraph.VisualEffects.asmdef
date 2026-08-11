@@ -2,7 +2,8 @@
     "name": "Snowraph.VFXSystem",
     "rootNamespace": "",
     "references": [
-        "GUID:7589334953ac49f40b26b13512bf8d78"
+        "GUID:7589334953ac49f40b26b13512bf8d78",
+        "GUID:c4de472b8a6f60147b82147615fa0a6a"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

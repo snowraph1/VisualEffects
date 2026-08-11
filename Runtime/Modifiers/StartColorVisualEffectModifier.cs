@@ -1,27 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Snowraph.VFXSystems
+namespace Snowraph.VisualEffects
 {
-    public class StartColorModifier : MonoBehaviour, IVFXModifier
+    public class StartColorVisualEffectModifier : MonoBehaviour, IVisualEffectModifier
     {
         #region Private Fields
 
-        private ParticleVFX _particleVFX;
-
-        #endregion
-
-        #region IVFXModifier
-
-        public void Initialize(IVFX vfx)
-        {
-            _particleVFX = (ParticleVFX)vfx;
-        }
+        private ParticleSystem _particleSystem;
 
         #endregion
 
         #region Public Methods
+
+        public void SetColor(Color color)
+        {
+            var main = _particleSystem.main;
+            main.startColor = new ParticleSystem.MinMaxGradient(color);
+        }
 
         public void SetRandomColors(Color[] colors)
         {
@@ -48,7 +43,7 @@ namespace Snowraph.VFXSystems
 
             gradient.SetKeys(colorKeys, alphaKeys);
 
-            var main = _particleVFX.Particles.main;
+            var main = _particleSystem.main;
 
             ParticleSystem.MinMaxGradient minMaxGradient;
             minMaxGradient = new ParticleSystem.MinMaxGradient(gradient);
@@ -59,7 +54,7 @@ namespace Snowraph.VFXSystems
 
         public void ResetModifier()
         {
-            var main = _particleVFX.Particles.main;
+            var main = _particleSystem.main;
             main.startColor = Color.white;
         }
 
