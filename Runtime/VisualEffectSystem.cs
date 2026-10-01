@@ -21,7 +21,6 @@ namespace Snowraph.VisualEffects
         {
             _visualEffectPools = new Dictionary<VisualEffectData, Pool<IVisualEffect>>();
             _visualEffectHandles = new Dictionary<IVisualEffect, Pool<IVisualEffect>>();
-            GameSystems.Instance.Register(this);
         }
 
         #endregion
