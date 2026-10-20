@@ -6,7 +6,15 @@ namespace Snowraph.VisualEffects
     {
         #region Private Fields
 
-        private ParticleSystem _particleSystem;
+        [SerializeField] private ParticleSystem _particleSystem;
+
+        private void Awake()
+        {
+            if (_particleSystem == null)
+            {
+                _particleSystem = GetComponentInParent<ParticleSystem>();
+            }
+        }
 
         #endregion
 
