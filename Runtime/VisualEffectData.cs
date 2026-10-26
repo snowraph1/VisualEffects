@@ -40,6 +40,7 @@ namespace Snowraph.VisualEffects
             }
 
             Debug.LogError($"Visual effect {_prefab.name} doesn't have a IVisualEffect component");
+            Destroy(visualEffectObject);
             return null;
         }
 
