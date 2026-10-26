@@ -11,6 +11,7 @@ namespace Snowraph.VisualEffects
         [SerializeField] private ParticleSystem _particleSystem;
 
         private List<IVisualEffectModifier> _visualEffectModifiers;
+        private bool _isPlaying;
 
         public event Action<IVisualEffect> Stopped;
 
@@ -35,11 +36,18 @@ namespace Snowraph.VisualEffects
                 _visualEffectModifiers = modifiers.ToList();
             }
 
+            _isPlaying = true;
             _particleSystem.Play();
         }
 
         public void Stop()
         {
+            if (!_isPlaying)
+            {
+                return;
+            }
+
+            _isPlaying = false;
             _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             Stopped?.Invoke(this);
         }
