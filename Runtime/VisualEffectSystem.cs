@@ -37,6 +37,11 @@ namespace Snowraph.VisualEffects
             }
 
             IVisualEffect visualEffect = StartVisualEffect(position, visualEffectPool);
+            if (visualEffect == null)
+            {
+                return;
+            }
+
             OnVisualEffectStarted?.Invoke(visualEffect);
         }
 
@@ -47,6 +52,11 @@ namespace Snowraph.VisualEffects
         private IVisualEffect StartVisualEffect(Vector3 position, Pool<IVisualEffect> visualEffectPool)
         {
             IVisualEffect visualEffect = visualEffectPool.GetElement();
+            if (visualEffect == null)
+            {
+                return null;
+            }
+
             visualEffect.RootTransform.position = position;
             visualEffect.Play();
 
